@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  role_name: sync-dir-from-other-host
+  role_name: sync_dir_from_other_host
   author: Ulf Rompe
   description: Keep a file or directory in sync with another ansible-managed host
   license: MIT

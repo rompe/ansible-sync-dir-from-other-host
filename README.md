@@ -28,8 +28,10 @@ may well be used to copy any other file or directory.
     sync_source: /etc/certs/example.com
     sync_target_dir: /srv/certs
   roles:
-    - { role: rompe.sync-dir-from-other-host, tags: "sync_dir" }
+    - { role: rompe.sync_dir_from_other_host, tags: "sync_dir" }
 ```
+
+After running this, `/srv/certs/example.com` will be in place and kept current every hour.
 
 ### Restrictions
 
