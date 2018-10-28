@@ -1,0 +1,5 @@
+---
+private_key_file: '/root/.ssh/id_rsa_{{ sync_source_host | regex_replace("\.", "_") }}_{{ sync_source | regex_replace("[/\.]", "_") }}'
+public_key_file: '{{ private_key_file }}.pub'
+sync_command: "scp -B -p -q -i {{ private_key_file | quote }} -r {{ sync_source_host | quote }}:{{ sync_source | quote }} {{ sync_target | quote }}"
+sync_target: "{{ sync_target_dir }}/{{ sync_source | basename }}"

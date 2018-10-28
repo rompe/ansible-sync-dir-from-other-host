@@ -1,0 +1,32 @@
+---
+- name: "Create {{ private_key_file }}"
+  command: "ssh-keygen -b 4096 -t rsa -N '' -f {{ private_key_file | quote}}"
+  args:
+    creates: "{{ private_key_file }}"
+
+- name: Register public key
+  command: "cat {{ public_key_file | quote }}"
+  register: public_key
+
+- name: "Allow {{ private_key_file }} to access {{ sync_source }} on {{ sync_source_host_ansible }}"
+  authorized_key:
+    user: root
+    key: "{{ public_key.stdout }}"
+    key_options: 'command="if [[ \"$SSH_ORIGINAL_COMMAND\" =~ ^scp[[:space:]]-f[[:space:]]{{ sync_source }}/.? ]]; then $SSH_ORIGINAL_COMMAND ; else echo ERROR Access Denied; fi",no-pty,no-port-forwarding,no-agent-forwarding,no-X11-forwarding'
+  delegate_to: "{{ sync_source_host_ansible }}"
+
+- name: "Create {{ sync_target_dir }}"
+  file:
+    path: "{{ sync_target_dir }}"
+    state: directory
+
+- name: "Initially sync {{ sync_target }}"
+  command: "{{ sync_command }}"
+  args:
+    creates: "{{ sync_target }}"
+
+- name: "Setup hourly cronjob to sync {{ sync_target }}"
+  cron:
+    name: "Sync {{ sync_target }}"
+    minute: "1"
+    job: "{{ sync_command }}"
