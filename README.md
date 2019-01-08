@@ -35,7 +35,7 @@ After running this, `/srv/certs/example.com` will be in place and kept current e
 
 ### Restrictions
 
-Using `scp` is simple and works without any special prerequites However, if you need to transfer
+Using `scp` is simple and works without any special prerequites. However, if you need to transfer
 huge directories, you might be better off using an rsync based solution to save network traffic.
 
 ### License
