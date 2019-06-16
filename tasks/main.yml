@@ -1,6 +1,6 @@
 ---
 - name: "Create {{ private_key_file }}"
-  command: "ssh-keygen -b 4096 -t rsa -N '' -f {{ private_key_file | quote}}"
+  command: "ssh-keygen -b 4096 -t rsa -N '' -f {{ private_key_file | quote }}"
   args:
     creates: "{{ private_key_file }}"
 
