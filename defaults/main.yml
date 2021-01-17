@@ -1,17 +1,3 @@
 ---
-private_key_file: '/root/.ssh/id_rsa_{{ sync_source_host | regex_replace("\.", "_") }}_{{ sync_source | regex_replace("[/\.]", "_") }}'
-public_key_file: '{{ private_key_file }}.pub'
-private_key_opt: "-i {{ private_key_file | quote }}"
-src_dest: "{{ sync_source_host | quote }}:{{ sync_source | quote }} {{ sync_target_dir | quote }}"
-rsync_cmd: "rsync -a -q -e"
-scp_cmd: "scp -B -p -q {{ private_key_opt }}"
-sync_ssh_cmd: "ssh {{ private_key_opt }} -o Batchmode=yes"
-sync_ssh_initial_cmd: "{{ sync_ssh_cmd }} -o StrictHostKeyCheck=no"
-rsync_command: "{{ rsync_cmd }} '{{ sync_ssh_cmd }}' {{ src_dest }}"
-sync_command: "{{ scp_cmd }} -r {{ src_dest }}"
-rsync_initial_command: "{{ rsync_cmd }} '{{ sync_ssh_initial_cmd }}' {{ src_dest }}"
-sync_initial_command: "{{ scp_cmd }} -o StrictHostCheck=no -r {{ src_dest }}"
-sync_target: "{{ sync_target_dir }}/{{ sync_source | basename }}"
-ssh_sec_command: "^scp[[:space:]vrpf-]+[[:space:]]{{ sync_source }}$"
 sync_minutes: "15"
 sync: "scp"
