@@ -1,8 +1,8 @@
 ## Keep a file or directory in sync with another ansible-managed host
 
 This role is intended to copy SSL-certificates generated on another host to the current host
-using `scp` and keep it in sync by adding a cronjob. It is not limited to SSL certificates and
-may well be used to copy any other file or directory.
+using `scp` or `rsync` (optional) and keep it in sync by adding a cronjob. It is not limited 
+to SSL certificates and may well be used to copy any other file or directory.
 
 ### These variables must be set in order to use this role
 
@@ -10,6 +10,8 @@ may well be used to copy any other file or directory.
 * `sync_source_host`: Source IP address or host name under which the other host in reachable from the currently processed host.
 * `sync_source`: Full path to the file or directory to be synced.
 * `sync_target_dir`: Target directory under which the basename of `sync_source` will be created.
+* `sync_minutes`: Cronjob `sync_minutes` will be used to setup the cronjob. Defaults to 15 (every 15 minutes the sync task is executed)
+* `sync`: Defaults to scp. If set to `rsync` rsync will be installed on target and source and is used to sync files.
 
 ### What this role does
 
@@ -27,16 +29,18 @@ may well be used to copy any other file or directory.
     sync_source_host: 192.168.1.42
     sync_source: /etc/certs/example.com
     sync_target_dir: /srv/certs
+    sync_minutes: 10
   roles:
     - { role: rompe.sync_dir_from_other_host, tags: "sync_dir" }
 ```
 
-After running this, `/srv/certs/example.com` will be in place and kept current every hour.
+After running this, `/srv/certs/example.com` will be in place and kept current every 10 minutes.
 
-### Restrictions
+### Restrictions and Solutions
 
-Using `scp` is simple and works without any special prerequites. However, if you need to transfer
-huge directories, you might be better off using an rsync based solution to save network traffic.
+Using `scp` is quite simple and works well with a small number of files, as all files are copied on every run. It has no prerequisite.
+To better scale with the number of files to transfer `rsync` can be used as option. However, `rsync` needs to be installed on both, source and target hosts.
+To use `rsync`, just set the variable `sync` to `rsync`.
 
 ### License
 
@@ -45,3 +49,4 @@ Licensed under the MIT License. See the LICENSE file for details.
 ### Author information
 
 Created by Ulf Rompe in 2018.
+Changed to rsync by Jens Gecius in 2020.
