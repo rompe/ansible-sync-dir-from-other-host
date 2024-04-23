@@ -1,43 +1,22 @@
 ---
-name: CI
+name: Template based CI workflow
 'on':
-  pull_request:
+  # pull_request:
+  # schedule:
+  #   - cron: "0 4 * * 5"
   push:
     branches:
       - main
       - master
-  schedule:
-    - cron: "0 4 * * 5"
+    tags:
+      - '*'
 
 defaults:
   run:
     working-directory: 'sleif.ws'
 
 jobs:
-
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out the codebase.
-        uses: actions/checkout@v2
-        with:
-          path: 'sleif.ws'
-
-      - name: Set up Python 3.
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-
-      - name: Install test dependencies.
-        run: pip3 install yamllint ansible ansible-lint
-
-      - name: Yaml lint code.
-        run: |
-          yamllint --version
-          yamllint .
-
-      - name: Ansible lint code.
-        run: |
-          ansible-lint --version
-          ansible-lint .
+  build:
+    uses: sleif/workflow_templates/.github/workflows/ci-template_ansible-lint-galaxy.yml@main
+    secrets:
+      GALAXY_API_KEY: ${{ secrets.GALAXY_API_KEY }}
