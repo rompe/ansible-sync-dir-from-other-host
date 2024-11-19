@@ -1,14 +1,4 @@
 ---
-- name: Ensure value set for sync variable
-  ansible.builtin.set_fact:
-    sync: "scp"
-  when: sync is undefined
-
-- name: Ensure minutes is defined
-  ansible.builtin.set_fact:
-    sync_minutes: "15"
-  when: sync_minutes is undefined
-
 - name: Install required rsync package locally
   ansible.builtin.package:
     name: rsync
