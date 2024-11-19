@@ -1,3 +1,4 @@
 ---
 sync_minutes: "15"
 sync: "scp"
+additional_commands: ""
