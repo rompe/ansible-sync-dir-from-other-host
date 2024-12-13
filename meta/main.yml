@@ -1,6 +1,7 @@
 ---
 galaxy_info:
   role_name: sync_dir_from_other_host
+  namespace: rompe
   author: Ulf Rompe
   description: Keep a file or directory in sync with another ansible-managed host
   license: MIT
